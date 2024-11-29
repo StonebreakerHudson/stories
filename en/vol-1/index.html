@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Stonebreaker and Hudson</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    /*
+     * Custom CSS file. Override it as you like.
+     *
+     * Credits to @killercup (https://gist.github.com/killercup); Extracted from this Gist:
+     *   https://gist.github.com/killercup/5917178
+     */
+
+    html {
+        font-size: 100%;
+        overflow-y: scroll;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+    }
+
+    body {
+        color: #444;
+        font-family: Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman', serif;
+        font-size: 12px;
+        line-height: 1.7;
+        padding: 1em;
+        margin: auto;
+        max-width: 42em;
+        background: #fefefe;
+    }
+
+    a {
+        color: #0645ad;
+        text-decoration: none;
+    }
+
+    a:visited {
+        color: #0b0080;
+    }
+
+    a:hover {
+        color: #06e;
+    }
+
+    a:active {
+        color: #faa700;
+    }
+
+    a:focus {
+        outline: thin dotted;
+    }
+
+    *::-moz-selection {
+        background: rgba(255, 255, 0, 0.3);
+        color: #000;
+    }
+
+    *::selection {
+        background: rgba(255, 255, 0, 0.3);
+        color: #000;
+    }
+
+    a::-moz-selection {
+        background: rgba(255, 255, 0, 0.3);
+        color: #0645ad;
+    }
+
+    a::selection {
+        background: rgba(255, 255, 0, 0.3);
+        color: #0645ad;
+    }
+
+    p {
+        margin: 1em 0;
+    }
+
+    img {
+        max-width: 100%;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: #111;
+        line-height: 125%;
+        margin-top: 2em;
+        font-weight: normal;
+    }
+
+    h4,
+    h5,
+    h6 {
+        font-weight: bold;
+    }
+
+    h1 {
+        font-size: 2.5em;
+    }
+
+    h2 {
+        font-size: 2em;
+    }
+
+    h3 {
+        font-size: 1.5em;
+    }
+
+    h4 {
+        font-size: 1.2em;
+    }
+
+    h5 {
+        font-size: 1em;
+    }
+
+    h6 {
+        font-size: 0.9em;
+    }
+
+    blockquote {
+        color: #666666;
+        margin: 0;
+        padding-left: 3em;
+        border-left: 0.5em #EEE solid;
+    }
+
+    hr {
+        display: block;
+        height: 2px;
+        border: 0;
+        border-top: 1px solid #aaa;
+        border-bottom: 1px solid #eee;
+        margin: 1em 0;
+        padding: 0;
+    }
+
+    pre,
+    code,
+    kbd,
+    samp {
+        color: #000;
+        font-family: monospace, monospace;
+        _font-family: 'courier new', monospace;
+        font-size: 0.98em;
+    }
+
+    pre {
+        white-space: pre;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    b,
+    strong {
+        font-weight: bold;
+    }
+
+    dfn {
+        font-style: italic;
+    }
+
+    ins {
+        background: #ff9;
+        color: #000;
+        text-decoration: none;
+    }
+
+    mark {
+        background: #ff0;
+        color: #000;
+        font-style: italic;
+        font-weight: bold;
+    }
+
+    sub,
+    sup {
+        font-size: 75%;
+        line-height: 0;
+        position: relative;
+        vertical-align: baseline;
+    }
+
+    sup {
+        top: -0.5em;
+    }
+
+    sub {
+        bottom: -0.25em;
+    }
+
+    ul,
+    ol {
+        margin: 1em 0;
+        padding: 0 0 0 2em;
+    }
+
+    li p:last-child {
+        margin-bottom: 0;
+    }
+
+    ul ul,
+    ol ol {
+        margin: .3em 0;
+    }
+
+    dl {
+        margin-bottom: 1em;
+    }
+
+    dt {
+        font-weight: bold;
+        margin-bottom: .8em;
+    }
+
+    dd {
+        margin: 0 0 .8em 2em;
+    }
+
+    dd:last-child {
+        margin-bottom: 0;
+    }
+
+    img {
+        border: 0;
+        -ms-interpolation-mode: bicubic;
+        vertical-align: middle;
+    }
+
+    figure {
+        display: block;
+        text-align: center;
+        margin: 1em 0;
+    }
+
+    figure img {
+        border: none;
+        margin: 0 auto;
+    }
+
+    figcaption {
+        font-size: 0.8em;
+        font-style: italic;
+        margin: 0 0 .8em;
+    }
+
+    table {
+        margin-bottom: 2em;
+        border-bottom: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+        border-spacing: 0;
+        border-collapse: collapse;
+    }
+
+    table th {
+        padding: .2em 1em;
+        background-color: #eee;
+        border-top: 1px solid #ddd;
+        border-left: 1px solid #ddd;
+    }
+
+    table td {
+        padding: .2em 1em;
+        border-top: 1px solid #ddd;
+        border-left: 1px solid #ddd;
+        vertical-align: top;
+    }
+
+    .author {
+        font-size: 1.2em;
+        text-align: center;
+    }
+
+    @media only screen and (min-width: 480px) {
+        body {
+            font-size: 14px;
+        }
+    }
+
+    @media only screen and (min-width: 768px) {
+        body {
+            font-size: 16px;
+        }
+    }
+
+    @media print {
+        * {
+            background: transparent !important;
+            color: black !important;
+            filter: none !important;
+            -ms-filter: none !important;
+        }
+        body {
+            font-size: 12pt;
+            max-width: 100%;
+        }
+        a,
+        a:visited {
+            text-decoration: underline;
+        }
+        hr {
+            height: 1px;
+            border: 0;
+            border-bottom: 1px solid black;
+        }
+        a[href]:after {
+            content: " (" attr(href) ")";
+        }
+        abbr[title]:after {
+            content: " (" attr(title) ")";
+        }
+        .ir a:after,
+        a[href^="javascript:"]:after,
+        a[href^="#"]:after {
+            content: "";
+        }
+        pre,
+        blockquote {
+            border: 1px solid #999;
+            padding-right: 1em;
+            page-break-inside: avoid;
+        }
+        tr,
+        img {
+            page-break-inside: avoid;
+        }
+        img {
+            max-width: 100% !important;
+        }
+        @page :left {
+            margin: 15mm 20mm 15mm 10mm;
+        }
+        @page :right {
+            margin: 15mm 10mm 15mm 20mm;
+        }
+        p,
+        h2,
+        h3 {
+            orphans: 3;
+            widows: 3;
+        }
+        h2,
+        h3 {
+            page-break-after: avoid;
+        }
+    }  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title"><p><img src="images/Basil_Stonebreaker.png" style="width:1.5in" alt="Stonebreaker" /> and <img src="images/Isadora_Hudson.png" style="width:1.5in" alt="Hudson" /></p></h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#basil-leaves-his-paradise-among-the-trees.">Basil leaves his paradise among the trees.</a></li>
+<li><a href="#isadora-makes-a-friend">Isadora makes a Friend</a></li>
+<li><a href="#bernard-makes-a-deal">Bernard Makes a Deal</a></li>
+<li><a href="#isadora-finishes-a-job">Isadora Finishes a Job</a></li>
+<li><a href="#basil-makes-it-to-the-city">Basil makes it to the city</a></li>
+<li><a href="#basil-drops-off-a-duffle-bag">Basil drops off a Duffle Bag</a></li>
+<li><a href="#bernard-gets-toys-for-basil.">Bernard gets toys for Basil.</a></li>
+<li><a href="#basil-admires-isadoras-work-while-at-bernards">Basil admires Isadora’s work while at Bernard’s</a></li>
+<li><a href="#isadora-unscathed-once-again">Isadora, unscathed once again</a></li>
+<li><a href="#isadora-meets-basil-and-bernard">Isadora meets Basil and Bernard</a></li>
+<li><a href="#basil-meets-isadora">Basil meets Isadora</a></li>
+<li><a href="#isadora-on-the-hill">Isadora on the Hill</a></li>
+<li><a href="#the-path-less-traveled">The Path Less Traveled</a></li>
+<li><a href="#the-beginning-of-basil">The Beginning of Basil</a></li>
+<li><a href="#credits">Credits</a></li>
+</ul>
+</nav>
+<h2 id="basil-leaves-his-paradise-among-the-trees.">Basil leaves his paradise among the trees.</h2>
+<p>The sky above transforms into a vibrant burnt orange color that casts a red-orange glow on everything below. The road ahead, covered in ash, splits as our driver looks in the rearview mirror, revealing clear skies, a river, and a dense forest. Max, Basil’s handler, insists on city visits for social interaction, but the ongoing forest fires have turned this departure from Basil’s personal paradise into a scene reminiscent of Dante’s Inferno.</p>
+<p>Basil swiftly moves his fingers across the keyboard strapped to his thigh. In his message, he requests a doubled fee due to increased health risks and the need for safety equipment amidst the raging fires. The response blinks ‘Agreed’ before slowly disappearing. A prompt appears on the dashboard, stating ‘Modification agreed, void if late,’ accompanied by a cartoonish ‘To agree, press I AGREE now.’ Reluctantly, he selects ‘I AGREE,’ grumbling about the necessity of protective gear, and immediately informs his supplier of the planned route and estimated arrival time.</p>
+<p>As he gazes through the windshield, flakes fall onto the glass. ‘Perhaps that was once a house?’ he wonders. The atmosphere changes from crisp to suffocating as Basil’s Mercedes 300D enters the city’s heat dome, significantly reducing visibility. Toggling various switches on the dashboard, Basil struggles to enhance visibility using infrared and motion detection, realizing the imminent threat of fire. He reflects on the root cause: faulty high-voltage wiring and negligence in brush management near power lines.</p>
+<p>Relaxing into his seat and adhering to the speed limit, memories flood back to a summer job herding for a power company. Managing the flock near power lines taught him valuable lessons in electricity distribution, safety, and hazard pay for the risk. He recalls using a light bulb to indicate proximity to the lines, flickering when the threshold became dangerous.</p>
+<p>Making good time amidst the debris from the forest fire, Basil exits into an exurban area, commenting, ‘You’ll never catch me living out here.’ Wondering about Bernard’s move, he reminisces about his loft and favorite bar, contrasting it with Bernard’s choice to live remotely.</p>
+<h2 id="isadora-makes-a-friend">Isadora makes a Friend</h2>
+<p>Isadora moves through the desolate city by wearing a full-face respirator and carrying a duffel bag backpack wrapped in plastic. There are few people around, most wearing respirators or wearing wet bandanas and goggles. Isadora finds the scene reminiscent of steampunk; her mobility is less restricted compared to others because her respirator is connected to a portable oxygen tank, and she has an air pre-filter on her hip. The pre-filter makes it easier for her face filters to work and improves the otherwise unpleasant air she walks through. Her destination? A data center is hidden and inaccessible to the general public.</p>
+<p>For three years, Isadora has dedicated herself to establishing communications for her volunteer platoon. Her squad operates on the frontlines, managing radios, intercepting enemy communications, and gathering intelligence before advancing. She remembers a nearly failed mission where she had to crawl down a tower in the dead of night, expecting her triumphant signature move. However, time was running out, so she looked through her night vision goggles and saw the approaching enemy.</p>
+<p>Moments later, a series of red and yellow explosions marked the enemy’s location in the distance - a signal for her platoon. Isadora reacted with amusement, like a schoolgirl’s giggles, before moving forward. Her platoon knows her as ‘Joker’ due to her skill in setting up lethal traps and creating explosive displays. This time, her sequence of explosions loosely mimicked Tchaikovsky’s 1812 Overture. She believed that leaving a lasting psychological impact on any survivors who may hear that tune in the future would be fitting, as physical wounds heal, but psychological scars endure.</p>
+<figure>
+<img src="images/hudson-joker.jpg" alt="" /><figcaption>Isadora Joker Hudson</figcaption>
+</figure>
+<p>Isadora arrived at the approximate location of the data center. Despite getting soaked by dripping dark water and causing minor flooding, she carefully scouted power lines and network cables. As Isadora moved through shelves and motherboards, she was surprised to find it was a Bitcoin mining operation. Following the Ethernet cables, she traced the route to the network equipment and stumbled upon a vociferating systems administrator. Silently maneuvering behind the server cabinets, Isadora skillfully attached a thin string to the trigger of a concealed shotgun on what seemed to be a standard office desk in the dim warehouse.</p>
+<p>The systems administrator vented his frustrations by berating and kicking an expensive piece of hardware, and Isadora’s attention momentarily shifted. He exclaimed, ‘ты кусок мусора’ (ty kusok musora), which means ‘you piece of garbage.’ Isadora calmly circled around the office and addressed him, saying, ‘You should treat your equipment better, maybe give it a name, like Frank.’ Startled, the technologist responded, ‘Ё моё!’ (yo moyo), which roughly translates to ‘Oh my!’ He then asked Isadora, ‘What are you doing here? Are you one of Mikhail’s girls?’ Isadora retorted, ‘No, I’m here to dismantle this place after acquiring the GostCoin you’re mining. You can cooperate and maybe survive, or you can cause me trouble, and I’ll leave you behind when I demolish this place. Your choice.’ At this point, his options were clear - cooperate or remain silent.</p>
+<p>But he went for the None-of-the-Above third choice and lunged towards the shotgun Isadora had earlier prepared. Being wholly untrained on such a weapon, he pulled it from the mount and caught it on the string. Puzzled, this caused the nerd to look back, pull again, and shoot himself in the face, covering the cabinets with grey matter and skull fragments.</p>
+<h2 id="bernard-makes-a-deal">Bernard Makes a Deal</h2>
+<p>Bernard lived on the city’s outskirts in a neighborhood known as the ‘exurbs.’ This location offered him a peaceful escape from the busy city life and provided him with a unique living arrangement. His home was cleverly constructed using repurposed shipping containers, making it an unconventional yet practical dwelling. However, the construction of the house was incomplete due to insufficient funds from the construction company. As a result, the house was three-quarters finished, with two shipping containers on the ground floor, two more on the second story, and an additional pair serving as a garage at the back. Despite its unassuming exterior, stepping inside revealed a spacious 60 ft x 60 ft area equipped with all the essentials of a typical home. The entire setup, including plumbing and electricity, cost only $20,000, with an additional $10,000 investment. This unconventional home provided Bernard with exceptional seclusion, a luxury often lacking within the city limits.</p>
+<p>Bernard’s residence was located in a cul-de-sac within a developing neighborhood. It was conveniently close to amenities but far enough to maintain a sense of distance from the bustling city life. The discreet appearance of the house helped Bernard avoid unwanted attention. He had a voice communication system connected to his cellphone, ensuring he could receive calls no matter where he was on the property. Today, Bernard received a text from Basil indicating that he would visit in three hours. Bernard looked forward to Basil’s arrival as they had a longstanding trade partnership. Unlike Bernard’s other customers, who were often private investigators or busy college students with demanding requests, Basil was always satisfied with Bernard’s goods. Bernard had just returned from The Farm.</p>
+<h2 id="isadora-finishes-a-job">Isadora Finishes a Job</h2>
+<p>As she tried to activate the security measures, she was confused by the lack of response. A strange device, similar to a credit card reader, was attached beneath the desk, just like the deceased had carried. Inserting the key card into the slot beneath the desk, the screen came to life, asking for the elusive security key.</p>
+<p>With a casual shrug, Isadora inserted the USB key into the keyboard. Its light blinked faintly, and a chain reaction was set off as she touched it. The once dormant servers sprang to life, monitors displayed cryptic data, and the room’s lighting dimmed as if paying respect to the eerie scene before her.</p>
+<p>As the servers powered up, Isadora took a moment to examine the abandoned terminal. Icons covered the screen, each hinting at the digital world of the deceased. Among them, a familiar sight caught her eye - a Crypto-Coin Wallet icon shimmered beside another labeled ‘Password Manager.’ Navigating swiftly to the password manager, Isadora skillfully switched back to the terminal and entered the command ‘pilfer.’ The mouse jiggler she had connected earlier transformed into an automated hacking tool, its activity illuminating the screen with a series of digital maneuvers.</p>
+<p>Thinking aloud about her next move, Isadora quickly dragged Mr. None-of-the-Above’s body, hidden in shadows, and positioned it beneath one of the humming server racks. The eerie absence of any alarms or alerts gave her a moment of confidence. Humming to herself, she began preparing for an explosive finale to conclude the unsettling evening.</p>
+<figure>
+<img src="images/Isadora_standing.png" alt="" /><figcaption>Isadora Hudson</figcaption>
+</figure>
+<p>Isadora pulled out what appeared to be a typical cyber pad - a flip-top display and a two-thumb keyboard. She used it to message her proxy, Niklos, informing him that NOTA Enterprises was about to experience an explosive market sell-off and that he should prepare for the order. She received a three-word response: “Date and Symbol.” No longer humming and happy, she jokingly replied, “Soon and IDK,” referring to “I don’t know” as the stock symbol. An unimpressed reply repeated, “Dates and Symbol,” causing Isadora to sit on the ground and search her pad for their stock symbol. After sending the expected response, she returned to pilfering the data center for functional hardware or tools. Unsurprisingly, everything around her was from the last cryptocurrency boom. She grabbed as many hard drives as she could find just before the planted explosives began to beep. Isadora encounters a growling fur ball while setting up explosives to bring down the data center. “Are you growling at me, kitty?” Its tail is held high like a dog’s, indicating that it must have grown up with a pack of dogs in this area. “You had better come with me; it won’t be safe here for much longer.” Isadora returned to the tech station and retrieved her small orange and white device from the desk.</p>
+<p>Her cyber pad beeps again, indicating that the detonators have been synchronized. “Please select your departure window: 1 minute, 5 minutes, or 15 minutes.” She chooses five minutes, picks up the growling cat, and places it in her bag. She chuckles as the room is filled with tiny flashing lights about to explode.</p>
+<h2 id="basil-makes-it-to-the-city">Basil makes it to the city</h2>
+<p>Basil skillfully steered his vehicle off the congested highway and onto the desolate outskirts near Bernard’s residence in the city. As he neared, he was confronted with a haunting sight—a neighborhood reduced to charred ruins. The landscape was littered with piles of debris and blackened trees, clear evidence of a community that had underestimated the threat of forest fires.</p>
+<p>Coming to a stop at a deserted traffic light, Basil felt a peculiar sense of isolation in the desolation surrounding him. After cautiously scanning his surroundings, he decided to bypass the empty intersection and proceed through the remnants of a neighborhood that had not adequately prepared for wildfires. The eerie silence enveloped him, intensifying the feeling of desolation in the scorched environment.</p>
+<p>Bernard, an enthusiast of apocalypse preparedness, lived on top of a hill adjacent to a man-made reservoir and a cascading river. Fire was not his primary concern; instead, he focused on ensuring a breathable atmosphere for himself and his guests during the short journey from the gate to the secondary entrance. “Where did I hide those CBRN gas masks from the start of the pandemic?” Bernard exclaimed triumphantly, producing two masks with dramatic flair reminiscent of Link from Zelda. “It’s dangerous to go alone! Take this.”</p>
+<p>In perfect timing with Bernard’s preparations, Basil arrived at Bernard’s house after navigating through the desolation and making his way up to the secluded neighborhood. Irritated by the need to park at the gate and manually request entry, Basil expressed his frustration in a colorful mixture of Polish and English. “Świński skurwiel, open up!” he shouted into the microphone before grumbling and returning to his car. The gate to Bernard’s paradise swung open, giving just enough space for Basil’s vehicle to pass through before promptly closing behind him. Bernard was lucky to be in the right place at the right time when this undervalued property became available. Initially seen as problematic because of its water features, the property offered a city view but required navigating a narrow road to reach it. The developer, envisioning it as an inheritance for his uninterested daughter, sold it at a bargain. Bernard wasted no time making it his own, seizing the opportunity with astute determination.</p>
+<p>Basil skillfully drove his vehicle towards the unique improvised garage. The garage was made by joining two 10 x 20 shipping containers together, with the middle section removed and attached to a sturdy support frame. This unconventional arrangement allowed Basil to avoid excessive approvals. Standard shipping containers are often stacked much higher for long-distance transportation. Basil’s understanding and interpretation of local regulations ensured compliance with city rules, making inspections easier to pass. As Basil brings the car to a stop, he notices a gas mask conveniently placed by the driver’s side, illuminated by the headlights. “How thoughtful of him to pay attention to the small details,” Basil appreciatively thinks. He parks the vehicle with care and proceeds to open his door. Putting on the gas mask, he realizes it significantly enhances his breathing compared to his previous makeshift solution of using a damp towel to cover his face.</p>
+<figure>
+<img src="images/Basil_standing.png" alt="" /><figcaption>Basil Stonebreaker</figcaption>
+</figure>
+<h2 id="basil-drops-off-a-duffle-bag">Basil drops off a Duffle Bag</h2>
+<p>Basil stretched and contorted his tired muscles after the long drive to meet Bernard, trying to relieve his stiffness. Exhausted from the journey, he briefly hugged Bernard, put down his travel bag, and sprawled on Bernard’s sofa. “Why not come in and take a break?” Bernard teased with a smirk. The oversized duffle bag caught Bernard’s curiosity; it had arm straps for easy carrying. Inside, smaller bags seemed to be haphazardly packed into the duffle bag.</p>
+<p>“Are these all…?” Bernard asked.</p>
+<p>“Yup, packed to the top. Last year’s harvest was terrible, but this year’s… overflowing,” Basil casually replied, gesturing with his hands.</p>
+<p>“Can I see?” Bernard timidly inquired.</p>
+<p>“Sure thing,” Basil responded, grinning.</p>
+<p>Opening the sealed duffle bag involved a systematic process: loosening the tension straps, disconnecting various accessories, and finally unzipping a magnetic closure. As the bag was unzipped, a distinct smell filled the air—a unique blend of psilocybin mushrooms and marijuana, two main crops from Basil’s beloved enterprise, The Farm. Among rows of fruit bushes and vegetables, these crops held significant importance. While the hallucinogenic mushrooms were traded with Bernard, the rest served as essential ingredients for enriching the soil for other crops.</p>
+<p>The Farm served multiple purposes—Basil’s sanctuary, a place for Bernard’s occasional gardening weekends, and a storage facility for goods, produce, and equipment. It wasn’t extravagant, just a small cabin facing a cliff. However, behind this unassuming cabin was The Farm. It was filled with produce from one end to the other—some thriving vertically on the walls, others hanging from the ceiling in basins. The space was adorned with rows of beans, squash, hot peppers, and even corn. The purpose of The Farm has evolved over the years. Originally conceived as a garden of air-purifying plants for cliffside living, it had transformed into a multi-tiered agricultural enterprise with goldfish, salmon, and snails.</p>
+<p>Bernard shifted his gaze to Basil, who had now fallen into a peaceful sleep on the couch. He gently covered Basil with a warm woolen blanket, ensuring his comfort, before focusing on the task at hand—cataloging Basil’s bountiful harvest.</p>
+<h2 id="bernard-gets-toys-for-basil.">Bernard gets toys for Basil.</h2>
+<p>As expected, the harvest was bountiful, allowing Basil to secure a significant line of credit for his upcoming venture. He retrieved a piece of paper from his pocket and handed it to Bernard, indicating it was time to start inventory.</p>
+<p>With great interest, Bernard examined the list, which included items such as a Cyber Pad, Ethernet Cable 50ft, and Burst Transmitter. The list continued onto the second page, detailing essential software, hardware, and specialized equipment.</p>
+<p>“I don’t usually ask, but…” Bernard started to say.</p>
+<p>“Don’t worry. It’s a routine assignment, although complicated politics may be involved,” Basil interrupted.</p>
+<p>Suddenly alarmed, Basil jumped up from his seat, startling Bernard. “What time is it!?”</p>
+<h2 id="basil-admires-isadoras-work-while-at-bernards">Basil admires Isadora’s work while at Bernard’s</h2>
+<p>Basil’s sense of urgency heightened as he heard Bernard’s response. “I haven’t missed it!” he exclaimed, a thrill coursing him.</p>
+<p>Basil leaped to his feet with a sudden burst of energy, snatching his bag and swiftly rummaging through it for his binoculars, GPS, and compass. He flung the curtains aside, dashing out to the top of a nearby container, where he promptly retrieved his GPS. As he peered towards the cityscape, a breathtaking display of the aurora borealis danced across the sky, resulting from recent intense sunspot activity amplified by the particulate matter.</p>
+<p>However, amidst this celestial spectacle, an unexpected series of explosions erupted near the city docks, catching Basil off guard. He meticulously counted a half-dozen substantial primary explosions through his binoculars, accompanied by twice as many secondary blasts, indicating a highly flammable source at the epicenter.</p>
+<p>“Industrial accident?” Bernard queried, his voice tinged with concern.</p>
+<p>“Doubtful,” Basil replied sharply, focusing on the unfolding events. “What time is it?”</p>
+<p>“Exactly 8 PM,” Bernard confirmed, their gazes locking in a moment of shared understanding. Both men sensed this synchronized with a planned event rather than an accidental occurrence.</p>
+<p>Basil’s excitement mingled with a sudden surge of concern as the explosions disrupted the tranquility of the evening. “Is that the old grain factory?” he asked, trying to discern the source.</p>
+<p>“Yup, got bought by some shady firm with ties to Eastern Europe,” Bernard responded with a note of skepticism, implying a potential cause for the chaos.</p>
+<p>Basil’s mind raced with possibilities. “You up for a drive?” he proposed a determined look in his eyes.</p>
+<p>“Only if we’re equipped. You came here without even a gas mask, and there’s a forest fire in between here and there in case you forgot,” Bernard chided, emphasizing the potential hazards ahead.</p>
+<p>“No, I just knew where I was and hoped my credit was good,” Basil retorted, a hint of mischief in his voice, attempting to lighten the tense atmosphere.</p>
+<p>Their exchange was interrupted by the distant glow of the ongoing explosions. Basil felt a surge of urgency. “We need to get there fast. Can you grab the emergency kit from the truck?” he asked Bernard, already moving to gather the rest of their gear.</p>
+<p>“Already on it,” Bernard replied, swiftly retrieving the kit from the vehicle as Basil gathered their essential supplies.</p>
+<p>With a sense of readiness, they dashed towards Bernard’s truck, gears and emergency kit in hand, preparing to confront the unknown dangers looming at the old grain factory. As they sped off, the aurora borealis continued its mesmerizing dance in the night sky, starkly contrasting the chaos unfolding in the distance.</p>
+<h2 id="isadora-unscathed-once-again">Isadora, unscathed once again</h2>
+<p>Isadora, with an air of nonchalant ease, strolled away from the dirty confines of the building, humming The Crystals’ “Da Doo Ron Ron.” Glancing at her watch, she noted the time as 7:55 and eagerly anticipated the forthcoming cleansing of the wretched place.</p>
+<p>Her playful rendition of the song’s chorus reverberated down the alley, catching the curious attention of the feline companion she had saved earlier, seemingly engrossed in Isadora’s impromptu performance.</p>
+<p>As the distant hum of approaching cool blue headlights signaled the arrival of a vehicle, an older Russian gentleman with a stern expression emerged. He purposefully advanced towards the building, shouting in Russian, “где он сейчас?” (gde on seychas?), demanding the whereabouts of her systems administrator friend.</p>
+<p>Isadora, smirking with a hint of hidden knowledge, retorted, “Where is he now? He’s a stump, and your turn is imminent.”</p>
+<p>Perched halfway on her shoulder, with its legs casually dangling from her backpack, the cat appeared unfazed by the unfolding drama as Isadora gracefully distanced herself from the building, the ominous beeping fading into the background.</p>
+<p>Pausing safely from the potential blast zone, Isadora’s ears perked up upon hearing the familiar Russian words nearby. “Принеси золото,” a phrase that demanded attention. “Zoloto? Gold?” she wondered, her curiosity piqued as a truck full of Russians ran into the building to retrieve the gold stored below the GostCoin mining operation.</p>
+<p>“Oh, shit,” she exclaimed, reaching into her pocket to retrieve the vibrating timer. The numbers counted down, 2… 1…, and the vibrations ceased. Then her watch beeped at 8:00 pm, the explosive charges she set beeped, and the timer lightly vibrated one more time. Then unintentional art began:</p>
+<p>A series of initial charges, which she had set, ignited the gas line and the remaining grain dust that had accumulated in the unused part of the building. These secondary explosions, along with the primary ones, generated intense heat, putting the stored unstable ammonium nitrate at risk. What made matters even more precarious was that the nitrate was housed in the same underground cavern that held several tons of gold.</p>
+<p>The resulting explosion looked beautiful against the aurora borealis, which had just arrived, and she could swear she saw some gold dust covering the surrounding area.</p>
+<h2 id="isadora-meets-basil-and-bernard">Isadora meets Basil and Bernard</h2>
+<p>The path leading to the city lay obscured beneath a dense shroud of soot while the atmosphere hung heavy with burnt debris, cascading heavily into the truck’s bed. Sealed off from the outside world, the truck’s cabin drew in filtered air via a snorkel, directing it into the engine and the interior, and expelled exhaust through a set of pipes forming a protective roll cage.</p>
+<p>As their pace slowed to navigate the wreckage-strewn road, a growing assembly of abandoned vehicles became evident. These remnants had been forsaken by those who mistakenly believed they could outpace the encroaching forest inferno. Acting as a natural barrier, the river shielded the city from the wildfire’s wrath, though the surroundings bore the burden of a thick, soot-laden atmosphere. Stubbornly clinging oily black residue left a grimy film on any surface it touched.</p>
+<p>Bernard steered the truck off the highway at the first clear exit into the city, finding some amusement in Basil’s incredulous reaction to his coveralls. Bernard, ever practical, defended their necessity. “They serve a purpose. Would you prefer your fancy jacket coated in this oily mess?” he reasoned, highlighting the functionality of their protective gear.</p>
+<p>Resigned to the inevitable, Basil suited up in the coveralls before exiting the truck. “Now it’s your turn,” he urged Bernard.</p>
+<p>“I’m ahead of you on that,” Bernard disclosed, revealing the coveralls beneath his jacket. “I put it on while you fetched the emergency pack at home. Here’s an earpiece for you; it uses jawbone conduction to transmit your voice, fitting neatly under the balaclava.”</p>
+<p>Initially feeling foolish for ridiculing Bernard’s seemingly practical invention, Basil reluctantly followed suit. He fitted the jaw-conduction headset and microphone, securing the balaclava and goggles. Finally, both donned their full-face respirators, fastening the pre-filter to their waist belts.</p>
+<p>“Microphone test,” Bernard initiated.</p>
+<p>“Mic check,” Basil confirmed.</p>
+<p>“Five by five. Let’s move. Wait a moment. Is that gold dust?” Bernard interjected, noticing something peculiar amid the hazy surroundings.</p>
+<h2 id="basil-meets-isadora">Basil meets Isadora</h2>
+<p>Basil and Bernard cautiously approached the riverbank, their steps quickening as they ventured closer. The once-sturdy granary, now reduced to a heap of debris along the shoreline, marked the chaotic aftermath. A large hole in the embankment allowed the river’s relentless flow to surge into the newly formed breach. Through his binoculars, Basil meticulously scanned the scene, his focus shifting from the dock swallowed by the water to the scattered figures nearby.</p>
+<p>Nestled next to the crevice lay a few individuals, their intentions masked by their prone forms. On a weathered park bench, a young woman captivated Basil’s attention up the incline. She seemed oddly amused by the unfolding chaos, her fingers tenderly caressing a feline lounging beside her—a magnificent creature whose exact breed eluded Basil’s discernment.</p>
+<p>“Basil, you’ve got a crater, a bunch of down-and-out Russians, and what appears to be a shower of gold. Why does every situation with you have to be this bizarre?” Bernard quipped rhetorically, his tone tinged with exasperation.</p>
+<p>“Normal is mundane, Bernard. And I’m allergic to mundane,” Basil retorted sharply.</p>
+<p>“Fine, you’ve been eyeing that girl for quite some time now. Got something to share?” Bernard inquired.</p>
+<p>“Indeed, I’d like to meet her. Can you get us up there before this whole place turns into a puddle?” Basil asked, excitement in his voice.</p>
+<p>“Not a chance. I’ll be lucky if we make it off this peninsula without having to replace my truck,” Bernard grumbled, irritation creeping into his words.</p>
+<p>Unfazed by Bernard’s growing annoyance, Basil attempted to map a potential route. Yet, obstacles loomed significant—a collapsed road and hill, an unexpected addition to the downtown scenery. An inexplicable sensation nagged at Basil, an elusive awareness that something about their surroundings felt different, almost ethereal, as though dusted with a shimmering veil. Extending his hand to catch the enigmatic particles that danced around them, Basil found his palm adorned with flecks of gold and specks of ash.</p>
+<p>“Do you have any clue why it’s raining gold?” Basil asked nonchalantly, evidently oblivious to Bernard’s prior inquiry.</p>
+<p>“You go ahead, leave the supplies, Dupa,” Basil instructed Bernard, slipping in another Polish jab.</p>
+<p>“I’m not Polish, and I’m definitely not your lover. Enjoy yourself, but remember, you only have two hours of oxygen left. I’ll wait on the other side of the river,” Bernard directed.</p>
+<p>“Sure thing, dear,” Basil teased.</p>
+<p>“Shǎbī,” Bernard muttered, labeling him an imbecile.</p>
+<p>With a smirk, Basil set forth towards the intriguing girl on the hill, leaving Bernard to watch from a distance, a mix of concern and annoyance etched across his face.</p>
+<h2 id="isadora-on-the-hill">Isadora on the Hill</h2>
+<p>Basil’s journey from the serene peninsula to the hill’s rugged crest proved grueling. Making his way through the city, he was confronted by a haunting blend of destruction: the remnants of recent, fierce wildfires intertwined with the fallout from Isadora’s art show. This event had spiraled into an unintentional yet grand spectacle. The city, under this dual assault, was bathed in an eerie, dark orange light, punctuated by the gleam of charred gold bricks scattered amidst the ruins. To Basil, these bricks, devoid of monetary value, symbolized something more profound – they were poignant reminders of his retreat to a secluded forest haven during times of turmoil.</p>
+<p>Ascending the hill, Basil faced a challenge he had not fully anticipated. Accustomed to the convenience of driving or cycling, he had underestimated the sheer physicality of walking. His path was further complicated by a pervasive, oily haze that lingered in the air, making each step slippery and hazardous. Amid this strenuous ascent, his mind wandered to a past encounter at the hill’s summit – a meeting with a vivacious girl, her image now tinged with mystery.</p>
+<p>Basil mulled over her possible insights into the chaotic scene she had observed from her unique lookout. Unbeknownst to him, there lay hidden layers to her connection with the recent catastrophic collapse of the grain warehouse.</p>
+<p>Upon reaching the hilltop, he felt a surge of gratitude for the practical coveralls Bernard had given him for this expedition. The summit was eerily deserted except for a single piece of paper on a park bench. Picking it up, Basil read a cryptic note that intrigued and baffled him:</p>
+<p>“I hope you enjoyed this one-time extravaganza. Why are you in the city during a wildfire?”</p>
+<p>Signed simply as “Isi,” the message featured an additional, whimsical touch – a greasy paw print, likely left by a cat.</p>
+<p>Basil could see why this location had been chosen from this elevated vantage point. The panorama below was a somber sight: a large, charred void where the grain silo once proudly stood, now a water-filled crater. Amidst the devastation, there was harrowing evidence of human tragedy – bodies strewn about, suggesting a frantic rush towards the blast rather than away. Thousands of blackened circuit boards were scattered amidst the wreckage, their wires dangling listlessly, contributing to the desolate scene.</p>
+<p>Diverting his attention from the grim panorama, Basil scoured the area for any clue to the girl’s whereabouts. The only trace was a series of boot prints in the dust, leading to and away from the bench where the note had been left. These prints were swiftly obscured by the accumulating dust and debris, much like footprints on a beach. Faced with the futility of his day’s efforts, Basil accepted the inevitable: he needed to return to the truck, rendezvous with Bernard, and inform his handler, Max, of the situation. The targeted building for surveillance no longer stood, rendering their plans to intercept the now-useless burnt power and network cables moot.</p>
+<p>Glancing at his oxygen tank, Basil was alarmed to see far less breathable air remaining than he had anticipated for his return trek. With only 20% and a modest reserve left, he urgently assessed the quickest route back. Fortunately, Bernard had been tracking his progress with binoculars from the city’s outskirts, near the river bridge. Eager to avoid a repeat of his laborious ascent, Basil scanned his surroundings for an alternative mode of transportation. His eyes landed on some discarded tin foil, a grill lid, and a slick, oily surface – perfect for an improvised slide.</p>
+<p>Basil’s descent on the makeshift sled was exhilarating. Seated in the grill lid, he drew his legs up and pushed off. After several attempts, he gained enough momentum to start sliding rapidly downhill. The thrill of the ride was undeniable, yet he hadn’t anticipated the challenge of steering. Basil found himself leaning precariously from side to side, desperately trying to navigate the descent without crashing.</p>
+<h2 id="the-path-less-traveled">The Path Less Traveled</h2>
+<p>Reeling from the adrenaline rush of his makeshift sled ride down the hill, Basil quickly oriented himself toward Bernard’s location. The descent had conservatively used his oxygen supply, but it was still alarmingly low. With the tank’s reserve dwindling, Basil faced the grim reality of breathing in the polluted air through his CBRN mask, now ineffective without its oxygen pre-filter.</p>
+<p>He hastened his steps through the city’s downtown, urgently yet carefully regulating his breathing. As he emerged on the city’s outskirts, the smoke thinned, offering a clearer view but no relief from his oxygen predicament. His tank was now perilously close to empty, with just 1% remaining. Basil’s breathing became labored. The final stretch across the river bridge, which once seemed straightforward, now loomed as a daunting challenge.</p>
+<p>His oxygen supply expired with a warning beep and a hiss as he stepped onto the bridge, exposing him to the harsh, acrid smoke. His senses revolted against the stench and toxicity of the air. His vision began to narrow with every step, the edges darkening ominously. Each breath was a battle against the invasive chemicals.</p>
+<p>Spotting Bernard in the distance, equipped with a large oxygen tank and mask, offered a glimmer of hope. But this sight wasn’t enough to counter the day’s exhaustive toll. Basil’s strength waned rapidly; the world seemed to constrict as he collapsed halfway across the bridge.</p>
+<p>The next conscious moment for Basil was a stark contrast. He awoke to the refreshing influx of clean oxygen and the angry, urgent drive of Bernard, speeding towards safety. The day’s exhausting pursuits, chasing elusive answers, had taken their full toll on him. The Beginning of Isadora</p>
+<p>Isadora Hudson, a name she chose rather than the one her Polish and Italian parents gave her, had spent years in the thick of conflict through her 20s volunteering straight out of college. At her forward operating base, she had initially thrived on the thrill of warfare, finding a grim satisfaction in setting traps and rigging unmanned aerial vehicles with explosives. But the allure of battle began to fade, and a growing sense of disillusionment set in. She felt she had made her mark in the military and now yearned to leverage her skills in the private sector, believing she could be more impactful there. The challenge lay in convincing her superiors that her days on the battlefield were over.</p>
+<p>During her penultimate tour, a unique incident would linger in her memory. It was during the holiday season, and as she descended from a festively decorated tree, a faint cry for help reached her ears. It emanated from a nearby trench. Torn between maintaining her cover and investigating the source, her curiosity ultimately won. Creeping on her belly towards the sound, she encountered several gravely injured enemy soldiers, heightening her wariness.</p>
+<p>Approaching the trench, Isadora called out “Марко,” the day’s codeword, hoping for the correct response. The weak reply of “Поло” from the trench signaled a friendly presence. Peering over, she identified a fellow soldier by their distinctive armband, uniform, and shoulder patch.</p>
+<p>“What are you doing down there, soldier?” she inquired.</p>
+<p>“Just taking a break. Trying not to bleed out and picking off as many Katsaps as I can,” came the weary response.</p>
+<p>Her dry retort, “Well, you’re in a trench, in case you hadn’t noticed,” was met with a wry joke about the lack of room service.</p>
+<p>Inquiring about the soldier’s ability to stand, Isadora learned they had been shot but had managed to fashion a makeshift tourniquet from roots and used snow to stem the bleeding. She quickly offered a rope, instructing the soldier to create a harness so she could pull them out.</p>
+<p>Securing the rope around a sturdy tree, Isadora braced herself and began the arduous task of extracting the soldier from the trench. With determination and strength, she hauled them up, inch by inch, until they were safely out of the trench.</p>
+<p>Sipping on warm glühwein, the soldier recounted his harrowing experiences over a shared meal. He spoke of a devastating incident where an enemy’s gas canister fortuitously landed in their trench. Amidst the chaos, he was shot while attempting to escape, ultimately finding himself the lone survivor, nursing an injured arm and facing limited options to move forward, so he held his position, propped up his rifle, and shot anyone who didn’t code in.</p>
+<p>“Well, you’re technically dead,” she revealed to the bewildered soldier. “The records list your entire squad as killed in action.”</p>
+<p>She added, “You’re declared dead, and my tour ended last week. I’m heading west. Would you like to join me? I’ve got a contact who can get us IDs and work.”</p>
+<p>After a moment of contemplative silence, broken only by the clinking of their glühwein glasses, the soldier finally spoke. “Okay, I’ll accompany you,” he agreed.</p>
+<p>“We’ll need to give you a new identity,” she suggested thoughtfully.</p>
+<p>“How about Arthur, after the strong and legendary bear?” she proposed with a smile.</p>
+<p>“Sounds good. And your name?” Arthur inquired, realizing they hadn’t exchanged names.</p>
+<p>“Isadora. Isadora Antonova Hudson,” she introduced herself.</p>
+<p>“Is that your real name?” Arthur probed.</p>
+<p>“No. It’s time to leave ‘The Joker’ persona behind and start anew,” Isadora stated firmly.</p>
+<p>Arthur began to question further, but Isadora quickly cut him off with a decisive “Don’t.”</p>
+<p>“What about a last name for me?” Arthur asked.</p>
+<p>“Arthur Seamus Hudson,” she declared confidently.</p>
+<p>“Seamus? Why that name?” Arthur questioned, intrigued.</p>
+<p>“Because, in a way, we’re like a lifeline for each other, helping each other get back west,” Isadora explained with a light-hearted chide, alluding to the mythological story of Achilles’ heel.</p>
+<p>“and Hudson?” Arthur asked</p>
+<p>“I’m from New York,” Isadora said flatly in an over-exaggerated New York accent.</p>
+<h2 id="the-beginning-of-basil">The Beginning of Basil</h2>
+<p>Basileios Rashmi Stonebreaker, a dynamic figure with a lineage as diverse as his interests, was born to a Greek father and an American mother. His imposing stature, reminiscent of a seasoned football player, was often concealed beneath an ever-present overcoat. Despite his physical largeness, his intellectual curiosity truly defined him. Basileios, a college dropout driven by a relentless thirst for adventure, delved into the realms of technology investigations and horticulture with unmatched zeal.</p>
+<p>His academic journey, though uncompleted, never hindered his ambitions. Basileios was drawn to the exhilarating world of industrial espionage, where his skills in uncovering, acquiring, and sometimes reinventing bespoke hardware and software flourished. This unique blend of interests and talents made him a standout in his field.</p>
+<p>Throughout his 20s and early 30s, Basileios’s career took him on a global odyssey. He traversed continents, picking up clients whose needs aligned with his expertise while funding his adventurous lifestyle. His work, demanding and often cloaked in secrecy, required a sanctuary for relaxation and reflection.</p>
+<p>It was in this pursuit of solitude and a connection to nature that Basileios discovered his ideal haven: a secluded expanse of forestland adjacent to a sprawling national park. Here, he purchased a few hectares, creating a personal retreat from the demands of his professional life and the outside world.</p>
+<p>In this tranquil setting, Basileios’s house became more than just a home; it was a fortress of solitude and a hub for his passion for horticulture. Amidst the lush greenery, he cultivated a diverse array of plants, finding peace and fulfillment in the rhythms of nature. This sanctuary offered him a respite from his high-stakes career and became a place where he could nurture his love for the natural world, blending his technological savvy with his green thumb in perfect harmony.</p>
+<p>Nestled into the slope of a towering quartz hill, Basileios Stonebreaker ingeniously integrated his home with nature. He meticulously bored tunnels through the hillside to lay fiber optic cables, harnessing natural light to illuminate his dwelling during daylight hours. Additionally, he installed an expansive array of solar panels. These panels bathed his plants in essential light and powered his nocturnal ventures, seamlessly blending sustainability with his adventurous lifestyle.</p>
+<p>Basileios, known to his acquaintances as Basil, possessed a pragmatic approach to his professional endeavors. He was broadly open-minded about the projects he undertook, setting few boundaries on his clientele. However, he maintained a firm stance against engaging in activities that involved extreme violence or risked drawing the attention of international law enforcement agencies like Interpol. This pragmatic yet daring approach set him apart from many of his contemporaries.</p>
+<p>His career, peppered with close calls, constantly reminded him of the delicate balance he maintained. On several occasions, Basil found himself teetering on the brink of danger, catching fleeting glimpses of the dire consequences he could face should he ever let his guard down or become careless. These experiences were not just cautionary tales but also a testament to the fine line he walked between risk and reward in his quest for thrills and professional accomplishment.</p>
+<div style="page-break-after: always;">
+
+</div>
+<h2 id="credits">Credits</h2>
+<figure>
+<img src="images/cover.png" alt="" /><figcaption>By the MISMI Zine</figcaption>
+</figure>
+<center>
+Call for Papers is always open, contact editor@mismii.net for submissions.
+</center>
+<h3 id="contributors">Contributors</h3>
+<ul>
+<li>Graphics of Isadora Hudson and Basil Stonebreaker by Punkpadour</li>
+<li>Copy editing by C. Nachlicht</li>
+<li>Translations by S. Urpils</li>
+</ul>
+</body>
+</html>
